@@ -1,30 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
+# next-blog
+Next.js + Typescript + Remarkableによる個人用ブログプラットフォーム
 
-## Getting Started
+## 概要
+- 記事は[blog-resources](https://github.com/SKKbySSK/blog-resources) で管理
+  - `site.json`にタイトルやサブタイトル、パーマリンク、Markdown等を設定する
+  - 任意の場所にMarkdownを配置
 
-First, run the development server:
+## 更新手順
+**TODO**
+1. `npm run update`を実行する
+2. ローカルで記事をチェック
+3. リモートでも同様に実行
 
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/zeit/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## ビルド詳細
+1. [blog-resources](https://github.com/SKKbySSK/blog-resources) を`resources/blog-resources`へクローン
+2. `site.json`を読み込んでパーマリンクとMarkdownを関連付ける
+3. Next.jsのStatic Generation(SSG)を用いて、静的ページを生成
