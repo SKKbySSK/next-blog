@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+blockquote
+{
+    padding-left: 10px;
+    border-left: 6px solid #c76c0c;
+    border-right: 2px solid #c76c0c;
+    background-color: #2A2A20;
+    font-style: oblique;
+    font-size: 16pt;
+}

@@ -1,0 +1,5 @@
+{
+  "title": "Ks' Café",
+  "title_format": "$title - $main_title",
+  "blog_resources_dir": "resources/blog-resources"
+}
