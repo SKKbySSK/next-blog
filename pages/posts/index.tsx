@@ -2,11 +2,11 @@ import CommonLayout from "../../components/common-layout";
 import {useRouter} from "next/router";
 import React from "react";
 import fs from "fs";
-import {Site} from "../../models/site";
+import {RawSite} from "../../models/site";
 import {PostCardList} from "../../components/post-card-list";
 import {NextPage} from "next";
 
-const Posts: NextPage<{ site: Site }> = (props) => {
+const Posts: NextPage<{ site: RawSite }> = (props) => {
     const router = useRouter()
 
     return (
@@ -19,7 +19,7 @@ const Posts: NextPage<{ site: Site }> = (props) => {
 // fsはサーバーサイドで動作するため
 // getStaticPropsでビルド時にmarkdownを取得する
 export async function getStaticProps() {
-    const site: Site = JSON.parse(fs.readFileSync('resources/blog-resources/site.json', 'utf8'))
+    const site: RawSite = JSON.parse(fs.readFileSync('resources/blog-resources/site.json', 'utf8'))
     return {
         props: {
             site: site

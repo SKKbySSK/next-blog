@@ -10,7 +10,7 @@ export const PostCardList: React.FC<{ posts: RawPost[], onClick?: (post: RawPost
         isProduction = true
     }
 
-    const cards = props.posts.filter(p => !isProduction || !p.hidden).map(p => {
+    const cards = props.posts.filter(p => !isProduction || !(p.hidden ?? false)).map(p => {
         return (
             <div key={p.permalink} className='m-1' style={{ width: '25em'}}>
                 <PostCardView post={p} onClick={props.onClick}/>

@@ -40,6 +40,9 @@ function convertRawToManagedPost(post: RawPost): Post {
 
     return {
         ...post,
+        title: post.title ?? '',
+        subtitle: post.subtitle ?? '',
+        headline: post.headline ?? '',
         style: post.style ?? PostCardStyle.default,
         tags: post.tags ?? [],
         actualContent: content,

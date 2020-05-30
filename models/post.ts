@@ -4,15 +4,15 @@ export enum PostCardStyle {
 }
 
 export type RawPost = {
-    title: string
+    title?: string
     subtitle?: string | undefined
-    headline: string
+    headline?: string
     image?: string | undefined
     tags?: string[]
     style?: PostCardStyle
     permalink: string
     content: string
-    hidden: boolean
+    hidden?: boolean
 }
 
 export type Post = {
