@@ -41,14 +41,30 @@ function generateLink(props: any) {
 
 const PostRenderer: React.FC<{ post: Post }> = (props) => {
     const md = new Remarkable('full', {
-        html: true,
-        typographer: true
+        typographer: true,
+        breaks: true,
     });
     md.use(linkify)
 
     // see https://github.com/HHogg/remarkable-react#options
     md.renderer = new RemarkableReactRenderer({
         components: {
+            h1: (props) => (
+                <div>
+                    <h1 style={{ fontSize: '28pt' }}>
+                        {props.children}
+                    </h1>
+                    <hr style={{ backgroundColor: 'gray' }}/>
+                </div>
+            ),
+            h2: (props) => (
+                <div>
+                    <h2 style={{ color: 'whitesmoke' }}>
+                        {props.children}
+                    </h2>
+                    <hr style={{ backgroundColor: 'slategray' }}/>
+                </div>
+            ),
             a: generateLink,
             pre: ({ content, params: language }) => (
                 <SyntaxHighlighter language={language} style={dark}>
@@ -72,6 +88,13 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
             hr: (props) => {
                 return (
                     <hr style={{ backgroundColor: 'gray' }}/>
+                )
+            },
+            p: (props) => {
+                return (
+                    <p style={{ marginTop: '1em', marginBottom: '1em' }}>
+                        {props.children}
+                    </p>
                 )
             },
             table: (props) => {
