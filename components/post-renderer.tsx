@@ -8,34 +8,47 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import {dark} from "react-syntax-highlighter/dist/cjs/styles/hljs";
 import {Button, Card, Table} from "react-bootstrap";
 import {parseTwitterUrl, TwitterData, TwitterMode, TwitterParser} from "./twitter-parser";
+import path from "path";
+import {blogParentDirectory, blogResourcesDirectory} from "../models/blog-constants";
 
-function generateLink(props: any) {
-    const href = props.href as string
-    let title = props.title ?? ''
-    title = title.toLowerCase()
+function generateLink(post: Post, props: any) {
+    let href = props.href as string
+    href = resolveLinkForPost(post, href)
+
+    const title = props.title ?? ''
+    const titleLowerCase = title.toLowerCase()
 
     if (href.startsWith('https://twitter')) {
         const data = parseTwitterUrl(href)
         const keys = Array.from(data.keys())
-        if (keys[TwitterData.id] !== undefined && (title == 'timeline' || title == 'follow')) {
-            const mode = title == 'timeline' ? TwitterMode.timeline : TwitterMode.follow
+        if (keys[TwitterData.id] !== undefined && (titleLowerCase == 'timeline' || titleLowerCase == 'follow')) {
+            const mode = titleLowerCase == 'timeline' ? TwitterMode.timeline : TwitterMode.follow
             return <TwitterParser data={data} mode={mode}/>
         }
     }
 
-    if (title.length > 0) {
+    if (titleLowerCase.length > 0) {
         return (
-            <Button variant="outline-light" href={props.href}>
-                {props.title}
+            <Button variant="outline-light" href={href}>
+                {title}
             </Button>
         )
     } else {
         // 装飾なしリンク
         return (
-            <a href={props.href} style={{ color: 'darkorange' }}>
+            <a href={href} style={{ color: 'darkorange' }}>
                 {props.children}
             </a>
         )
+    }
+}
+
+function resolveLinkForPost(post: Post, link: string): string {
+    if (link.startsWith('http://') || link.startsWith('https://')) {
+        return link
+    } else {
+        const directory = path.dirname(post.content)
+        return `/${blogResourcesDirectory.replace(blogParentDirectory + '/', '')}/${directory}/${link}`
     }
 }
 
@@ -65,7 +78,7 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
                     <hr style={{ backgroundColor: 'slategray' }}/>
                 </div>
             ),
-            a: generateLink,
+            a: (aProps) => generateLink(props.post, aProps),
             pre: ({ content, params: language }) => (
                 <SyntaxHighlighter language={language} style={dark}>
                     {content}
@@ -103,6 +116,9 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
                         {props.children}
                     </Table>
                 )
+            },
+            img: (imgProps) => {
+                return <img src={resolveLinkForPost(props.post, imgProps.src)} alt={imgProps.title}/>
             }
         }
     })

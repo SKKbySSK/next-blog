@@ -5,6 +5,7 @@ import fs from "fs";
 import {RawSite} from "../../models/site";
 import {PostCardList} from "../../components/post-card-list";
 import {NextPage} from "next";
+import {blogSiteFile} from "../../models/blog-constants";
 
 const Posts: NextPage<{ site: RawSite }> = (props) => {
     const router = useRouter()
@@ -19,7 +20,7 @@ const Posts: NextPage<{ site: RawSite }> = (props) => {
 // fsはサーバーサイドで動作するため
 // getStaticPropsでビルド時にmarkdownを取得する
 export async function getStaticProps() {
-    const site: RawSite = JSON.parse(fs.readFileSync('resources/blog-resources/site.json', 'utf8'))
+    const site: RawSite = JSON.parse(fs.readFileSync(blogSiteFile, 'utf8'))
     return {
         props: {
             site: site

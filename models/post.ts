@@ -23,6 +23,7 @@ export type Post = {
     tags: string[]
     style: PostCardStyle
     permalink: string
+    content: string
     actualContent: string
     lastModifiedTimeMs: number
 }

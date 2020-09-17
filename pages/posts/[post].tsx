@@ -6,6 +6,7 @@ import CommonLayout from "../../components/common-layout";
 import React from "react";
 import {Post, PostCardStyle, RawPost} from "../../models/post";
 import PostRenderer from "../../components/post-renderer";
+import {blogResourcesDirectory, blogSiteFile} from "../../models/blog-constants";
 
 const PostPage: NextPage<{ post: Post }> = (props) => {
     const router = useRouter()
@@ -14,7 +15,7 @@ const PostPage: NextPage<{ post: Post }> = (props) => {
     return (
         <CommonLayout router={router} title={props.post.title}>
             <div className='d-flex justify-content-center'>
-                <div className='d-flex flex-column bg-gray-900 p-3' style={{ marginLeft: '4em', marginRight: '4em', paddingLeft: '6em', paddingRight: '6em', paddingTop: '2em', paddingBottom: '2em', maxWidth: '1700px' }}>
+                <div className='d-flex flex-column bg-gray-900 p-3' style={{ marginLeft: '4em', marginRight: '4em', paddingLeft: '6em', paddingRight: '6em', paddingTop: '2em', paddingBottom: '2em', maxWidth: '1700px', minWidth: '400px' }}>
                     <PostRenderer post={props.post}/>
                     <hr/>
                     <div className='text-right text-gray-400 font-italic'>
@@ -28,13 +29,13 @@ const PostPage: NextPage<{ post: Post }> = (props) => {
 
 // 最初に実行される。事前ビルドするパスを配列でreturnする。
 export async function getStaticPaths() {
-    const site: RawSite = JSON.parse(fs.readFileSync('resources/blog-resources/site.json', 'utf8'))
+    const site: RawSite = JSON.parse(fs.readFileSync(blogSiteFile, 'utf8'))
     const paths = site.posts.map((p) => `/posts/${p.permalink}`)
     return { paths, fallback: false }
 }
 
 function convertRawToManagedPost(post: RawPost): Post {
-    const file = `resources/blog-resources/${post.content}`
+    const file = `${blogResourcesDirectory}/${post.content}`
     const content = fs.readFileSync(file, 'utf8')
     const stat = fs.statSync(file)
 
@@ -53,7 +54,7 @@ function convertRawToManagedPost(post: RawPost): Post {
 // fsはサーバーサイドで動作するため
 // getStaticPropsでビルド時にmarkdownを取得する
 export async function getStaticProps({ params }) {
-    const site: RawSite = JSON.parse(fs.readFileSync('resources/blog-resources/site.json', 'utf8'))
+    const site: RawSite = JSON.parse(fs.readFileSync(blogSiteFile, 'utf8'))
 
     let matchedPost: RawPost
     for (const post of site.posts) {
