@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run update && next build",
     "start": "npm run git:update && next start",
     "update": "npm run git:update",
     "git:update": "npm run git:cd && npm run git:pull",
