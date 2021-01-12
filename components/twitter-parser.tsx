@@ -2,13 +2,14 @@ import { TwitterTimelineEmbed, TwitterShareButton, TwitterFollowButton, TwitterH
 import React from "react";
 
 export enum TwitterData {
-    id,
-    tweet,
+    userId,
+    tweetId,
 }
 
 export enum TwitterMode {
-    timeline,
-    follow,
+    timeline = 'timeline',
+    follow = 'follow',
+    tweet = 'tweet',
 }
 
 function getUserId(url: string) {
@@ -18,23 +19,49 @@ function getUserId(url: string) {
     return result[1]
 }
 
-export function parseTwitterUrl(url: string): Map<TwitterData, string> {
+function getTweetId(url: string) {
+    const userRegex = /^https:\/\/twitter.com\/.+\/status\/(.+)/
+
+    const result = userRegex.exec(url)
+    return result[1]
+}
+
+export function parseTwitterUrl(url: string, mode: TwitterMode): Map<TwitterData, string> {
     const map: Map<TwitterData, string> = new Map<TwitterData, string>()
-    const id = getUserId(url)
-    if (id !== undefined) {
-        map.set(TwitterData.id, id)
+
+    switch (mode) {
+        case TwitterMode.timeline:
+        case TwitterMode.follow:
+            const userId = getUserId(url)
+            if (userId !== undefined) {
+                map.set(TwitterData.userId, userId)
+            }
+            break
+        case TwitterMode.tweet:
+            const tweetId = getTweetId(url)
+            if (tweetId !== undefined) {
+                map.set(TwitterData.tweetId, tweetId)
+            }
+            break
     }
 
     return map
 }
 
 export const TwitterParser: React.FC<{ data: Map<TwitterData, string>, mode: TwitterMode }> = (props) => {
-    if (props.data.has(TwitterData.id)) {
+    if (props.data.has(TwitterData.userId)) {
         switch (props.mode) {
             case TwitterMode.timeline:
-                return <TwitterTimelineEmbed sourceType="profile" screenName={props.data.get(TwitterData.id)} theme='dark' options={{height: 500, width: 400}}/>
+                return <TwitterTimelineEmbed sourceType="profile" screenName={props.data.get(TwitterData.userId)} theme='dark' options={{ height: 500, width: 400 }} />
             case TwitterMode.follow:
-                return <TwitterFollowButton screenName={props.data.get(TwitterData.id)} theme='dark'/>
+                return <TwitterFollowButton screenName={props.data.get(TwitterData.userId)} theme='dark' />
+        }
+    }
+
+    if (props.data.has(TwitterData.tweetId)) {
+        switch (props.mode) {
+            case TwitterMode.tweet:
+                return <TwitterTweetEmbed tweetId={props.data.get(TwitterData.tweetId)} theme='dark' />
         }
     }
 

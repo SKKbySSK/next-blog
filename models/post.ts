@@ -1,15 +1,7 @@
-export enum PostCardStyle {
-    default = "default",
-    overlay = "overlay",
-}
-
 export type RawPost = {
     title?: string
     subtitle?: string | undefined
-    headline?: string
-    image?: string | undefined
     tags?: string[]
-    style?: PostCardStyle
     permalink: string
     content: string
     hidden?: boolean
@@ -18,10 +10,7 @@ export type RawPost = {
 export type Post = {
     title: string
     subtitle?: string | undefined
-    headline: string
-    image?: string | undefined
     tags: string[]
-    style: PostCardStyle
     permalink: string
     content: string
     actualContent: string

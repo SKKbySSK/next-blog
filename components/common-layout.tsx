@@ -1,47 +1,48 @@
 import Head from "next/head";
-import React, {SyntheticEvent} from "react";
-import {Nav, Navbar} from "react-bootstrap";
+import React, { SyntheticEvent } from "react";
 import Config from "../resources/site-config.json";
-import {NextRouter} from "next/router";
-import NavigationBar from "./navigation-bar";
+import { NextRouter } from "next/router";
+import { Box } from "@chakra-ui/react";
 
 class CommonLayoutProps {
     router: NextRouter
     title?: string
+    description?: string
     children: any
 }
 
-export default class CommonLayout extends React.Component<CommonLayoutProps, any> {
-    render() {
-        let title: string
-        if (this.props.title?.length > 0 ?? false) {
-            title = Config.title_format.replace("$title", this.props.title).replace("$main_title", Config.title)
-        } else {
-            title = Config.title
-        }
-
-        let onSelectLink = (eventKey: string, event?: SyntheticEvent) => {
-            switch (eventKey) {
-                case "Posts":
-                    this.props.router.push('/posts');
-                    break;
-            }
-        }
-
-        return (
-            <div className="bg-gray-800 h-screen" style={{overflow: "scroll"}}>
-                <NavigationBar router={this.props.router} title={Config.title}/>
-
-                <Head>
-                    <title>{title}</title>
-                    <link rel="icon" href="/favicon.ico" />
-                </Head>
-                <main>
-                    <div className="text-white">
-                        {this.props.children}
-                    </div>
-                </main>
-            </div>
-        )
+export default function CommonLayout(props: CommonLayoutProps) {
+    let title: string
+    if (props.title?.length > 0 ?? false) {
+        title = Config.titleFormat.replace("$title", props.title).replace("$main_title", Config.title)
+    } else {
+        title = Config.title
     }
+
+    const metaDescription = props.description ?? Config.description;
+    return (
+        <div className="bg-gray-800 h-screen" style={{ overflow: 'auto scroll' }}>
+            <Head>
+                <title>{title}</title>
+                <link rel="icon" href="/favicon.ico" />
+                <meta name="description" content={metaDescription} />
+                <meta property="og:type" content="website" />
+                <meta name="og:title" property="og:title" content={title} />
+                <meta
+                    name="og:description"
+                    property="og:description"
+                    content={metaDescription}
+                />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content={metaDescription} />
+                <meta name="twitter:creator" content={Config.authorTwitter} />
+                <link rel="icon" type="image/png" href="/static/favicon.ico" />
+                <link rel="apple-touch-icon" href="/static/favicon.ico" />
+            </Head>
+            <Box margin='auto' width={'90%'} maxWidth='800pt' textColor='white'>
+                {props.children}
+            </Box>
+        </div>
+    )
 }

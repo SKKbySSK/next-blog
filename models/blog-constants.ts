@@ -1,6 +1,5 @@
 
-const blogParentDirectory = 'public'
-const blogResourcesDirectory = `${blogParentDirectory}/blog-resources`
-const blogSiteFile = `${blogResourcesDirectory}/site.json`
+import Config from "../resources/site-config.json";
+const blogSiteFile = `${Config.blogResourcesDir}/site.json`
 
-export { blogParentDirectory, blogResourcesDirectory, blogSiteFile }
+export { blogSiteFile }

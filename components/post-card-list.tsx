@@ -1,6 +1,7 @@
-import {Post, RawPost} from "../models/post";
-import {PostCardView} from "./post-card-view";
+import { Post, RawPost } from "../models/post";
+import { PostCardView } from "./post-card-view";
 import React from "react";
+import { Box, Stack } from "@chakra-ui/react";
 
 export const PostCardList: React.FC<{ posts: RawPost[], onClick?: (post: RawPost) => void }> = (props) => {
     let isProduction: boolean
@@ -12,15 +13,15 @@ export const PostCardList: React.FC<{ posts: RawPost[], onClick?: (post: RawPost
 
     const cards = props.posts.filter(p => !isProduction || !(p.hidden ?? false)).map(p => {
         return (
-            <div key={p.permalink} className='m-1' style={{ width: '25em'}}>
-                <PostCardView post={p} onClick={props.onClick}/>
-            </div>
+            <Box key={p.permalink}>
+                <PostCardView post={p} onClick={props.onClick} />
+            </Box>
         )
     })
 
     return (
-        <div className='d-flex flex-wrap justify-content-center align-items-center'>
+        <Stack>
             {cards}
-        </div>
+        </Stack>
     )
 }

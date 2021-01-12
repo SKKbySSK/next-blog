@@ -1,28 +1,23 @@
-import {NextPage} from "next";
-import {RawSite} from "../../models/site";
+import { NextPage } from "next";
+import { RawSite } from "../../models/site";
 import fs from "fs";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import CommonLayout from "../../components/common-layout";
 import React from "react";
-import {Post, PostCardStyle, RawPost} from "../../models/post";
+import { Post, RawPost } from "../../models/post";
 import PostRenderer from "../../components/post-renderer";
-import {blogResourcesDirectory, blogSiteFile} from "../../models/blog-constants";
+import { blogSiteFile } from "../../models/blog-constants";
+import Header from "../../components/header";
+import Config from "../../resources/site-config.json";
 
 const PostPage: NextPage<{ post: Post }> = (props) => {
     const router = useRouter()
     const modified = new Date(props.post.lastModifiedTimeMs)
 
     return (
-        <CommonLayout router={router} title={props.post.title}>
-            <div className='d-flex justify-content-center'>
-                <div className='d-flex flex-column bg-gray-900 p-3' style={{ marginLeft: '4em', marginRight: '4em', paddingLeft: '6em', paddingRight: '6em', paddingTop: '2em', paddingBottom: '2em', maxWidth: '1700px', minWidth: '400px' }}>
-                    <PostRenderer post={props.post}/>
-                    <hr/>
-                    <div className='text-right text-gray-400 font-italic'>
-                        <p>{`Last Modified : ${modified.toLocaleString('ja-JP')}`}</p>
-                    </div>
-                </div>
-            </div>
+        <CommonLayout router={router} title={props.post.title} description={props.post.subtitle}>
+            <Header />
+            <PostRenderer post={props.post} />
         </CommonLayout>
     )
 }
@@ -35,7 +30,7 @@ export async function getStaticPaths() {
 }
 
 function convertRawToManagedPost(post: RawPost): Post {
-    const file = `${blogResourcesDirectory}/${post.content}`
+    const file = `${Config.blogResourcesDir}/${post.content}`
     const content = fs.readFileSync(file, 'utf8')
     const stat = fs.statSync(file)
 
@@ -43,8 +38,6 @@ function convertRawToManagedPost(post: RawPost): Post {
         ...post,
         title: post.title ?? '',
         subtitle: post.subtitle ?? '',
-        headline: post.headline ?? '',
-        style: post.style ?? PostCardStyle.default,
         tags: post.tags ?? [],
         actualContent: content,
         lastModifiedTimeMs: stat.mtimeMs,

@@ -1,15 +1,15 @@
-import {Post} from "../models/post";
+import { Post } from "../models/post";
 import React from "react";
 import RemarkableReactRenderer from "remarkable-react";
-import {Remarkable} from 'remarkable';
-import {linkify} from 'remarkable/linkify';
+import { Remarkable } from 'remarkable';
+import { linkify } from 'remarkable/linkify';
 import SyntaxHighlighter from "react-syntax-highlighter";
 // https://github.com/conorhastings/react-syntax-highlighter/issues/230#issuecomment-568377353
-import {dark} from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import {Button, Card, Table} from "react-bootstrap";
-import {parseTwitterUrl, TwitterData, TwitterMode, TwitterParser} from "./twitter-parser";
+import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import { parseTwitterUrl, TwitterData, TwitterMode, TwitterParser } from "./twitter-parser";
 import path from "path";
-import {blogParentDirectory, blogResourcesDirectory} from "../models/blog-constants";
+import Config from "../resources/site-config.json";
+import { Box, Button, Heading, Link, Stack, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 
 function generateLink(post: Post, props: any) {
     let href = props.href as string
@@ -19,26 +19,31 @@ function generateLink(post: Post, props: any) {
     const titleLowerCase = title.toLowerCase()
 
     if (href.startsWith('https://twitter')) {
-        const data = parseTwitterUrl(href)
-        const keys = Array.from(data.keys())
-        if (keys[TwitterData.id] !== undefined && (titleLowerCase == 'timeline' || titleLowerCase == 'follow')) {
-            const mode = titleLowerCase == 'timeline' ? TwitterMode.timeline : TwitterMode.follow
-            return <TwitterParser data={data} mode={mode}/>
-        }
+        const mode = titleLowerCase as TwitterMode
+        const data = parseTwitterUrl(href, titleLowerCase)
+        return (
+            <Box p='0.5em'>
+                <TwitterParser data={data} mode={mode} />
+            </Box>
+        )
     }
 
     if (titleLowerCase.length > 0) {
         return (
-            <Button variant="outline-light" href={href}>
-                {title}
-            </Button>
+            <Link {...props}>
+                <Button colorScheme='teal' >
+                    {title}
+                </Button>
+            </Link >
         )
     } else {
         // 装飾なしリンク
         return (
-            <a href={href} style={{ color: 'darkorange' }}>
-                {props.children}
-            </a>
+            <Link href={props.href} style={{ color: 'darkorange' }}>
+                <Box mb='1em' display='inline'>
+                    {props.children}
+                </Box>
+            </Link>
         )
     }
 }
@@ -47,9 +52,12 @@ function resolveLinkForPost(post: Post, link: string): string {
     if (link.startsWith('http://') || link.startsWith('https://')) {
         return link
     } else {
-        const directory = path.dirname(post.content)
-        return `/${blogResourcesDirectory.replace(blogParentDirectory + '/', '')}/${directory}/${link}`
+        return '/posts/' + post.permalink
     }
+}
+
+function hr(thick: boolean): React.ReactNode {
+    return <Box h={thick ? '5px' : '3px'} w='100%' backgroundColor='gray.500' mb='2px' rounded='lg' />
 }
 
 const PostRenderer: React.FC<{ post: Post }> = (props) => {
@@ -63,20 +71,33 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
     md.renderer = new RemarkableReactRenderer({
         components: {
             h1: (props) => (
-                <div>
-                    <h1 style={{ fontSize: '28pt' }}>
+                <Stack mt='0.5em' mb='0.8em'>
+                    <Heading as='h1' mt='0.5em' color='gray.100'>
                         {props.children}
-                    </h1>
-                    <hr style={{ backgroundColor: 'gray' }}/>
-                </div>
+                    </Heading>
+                    {hr(true)}
+                </Stack>
             ),
             h2: (props) => (
-                <div>
-                    <h2 style={{ color: 'whitesmoke' }}>
+                <Stack mb='0.8em'>
+                    <Heading as='h2' mt='0.5em' fontSize='1.7em' color='gray.100'>
                         {props.children}
-                    </h2>
-                    <hr style={{ backgroundColor: 'slategray' }}/>
-                </div>
+                    </Heading>
+                    {hr(false)}
+                </Stack>
+            ),
+            h3: (props) => (
+                <Stack mb='0.8em'>
+                    <Heading as='h3' mt='0.5em' fontSize='1.5em'>
+                        {props.children}
+                    </Heading>
+                    {hr(false)}
+                </Stack>
+            ),
+            h4: (props) => (
+                <Heading as='h4' mt='0.5em' mb='0.8em' fontSize='1.3em'>
+                    {props.children}
+                </Heading>
             ),
             a: (aProps) => generateLink(props.post, aProps),
             pre: ({ content, params: language }) => (
@@ -99,34 +120,49 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
                 )
             },
             hr: (props) => {
-                return (
-                    <hr style={{ backgroundColor: 'gray' }}/>
-                )
+                return hr(false)
             },
             p: (props) => {
                 return (
-                    <p style={{ marginTop: '1em', marginBottom: '1em' }}>
+                    <Box mb='1em' color='gray.200'>
                         {props.children}
-                    </p>
+                    </Box>
                 )
             },
             table: (props) => {
                 return (
-                    <Table striped bordered hover variant='dark'>
-                        {props.children}
-                    </Table>
+                    <Box p='1em' rounded='lg'>
+                        <Table variant='simple' colorScheme='gray'>
+                            {props.children}
+                        </Table>
+                    </Box>
                 )
             },
+            thead: (props) => {
+                return <Thead backgroundColor='#37474F40' {...props} />
+            },
+            tbody: (props) => {
+                return <Tbody backgroundColor='#37434f80' {...props} />
+            },
+            tr: (props) => {
+                return <Tr {...props} />
+            },
+            th: (props) => {
+                return <Th color='gray.300' borderBottom='1px' borderColor='gray.600' {...props} />
+            },
+            td: (props) => {
+                return <Td {...props} borderBottom='1px' borderColor='gray.600' />
+            },
             img: (imgProps) => {
-                return <img src={resolveLinkForPost(props.post, imgProps.src)} alt={imgProps.title}/>
+                return <img src={resolveLinkForPost(props.post, imgProps.src)} alt={imgProps.title} />
             }
         }
     })
 
     return (
-        <div>
+        <Box>
             {md.render(props.post.actualContent)}
-        </div>
+        </Box>
     )
 }
 

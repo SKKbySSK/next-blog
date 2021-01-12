@@ -1,18 +1,33 @@
-import React from 'react';
 import CommonLayout from "../components/common-layout";
-import {useRouter} from "next/router"
-import {PostCardView} from "../components/post-card-view";
-import {Post, PostCardStyle} from "../models/post";
-import {CardColumns, CardDeck} from "react-bootstrap";
-import {PostCardList} from "../components/post-card-list";
-import UnderConstruction from "../components/under-construction";
+import { useRouter } from "next/router";
+import React from "react";
+import fs from "fs";
+import { RawSite } from "../models/site";
+import { PostCardList } from "../components/post-card-list";
+import { NextPage } from "next";
+import { blogSiteFile } from "../models/blog-constants";
+import Header from "../components/header";
 
-export default function Home() {
+const Posts: NextPage<{ site: RawSite }> = (props) => {
     const router = useRouter()
 
     return (
         <CommonLayout router={router}>
-            <UnderConstruction/>
+            <Header />
+            <PostCardList posts={props.site.posts} onClick={(post) => router.push(`/posts/${post.permalink}`)} />
         </CommonLayout>
     )
 }
+
+// fsはサーバーサイドで動作するため
+// getStaticPropsでビルド時にmarkdownを取得する
+export async function getStaticProps() {
+    const site: RawSite = JSON.parse(fs.readFileSync(blogSiteFile, 'utf8'))
+    return {
+        props: {
+            site: site
+        }
+    }
+}
+
+export default Posts
