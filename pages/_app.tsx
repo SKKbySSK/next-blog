@@ -2,6 +2,17 @@ import "./style.css";
 import React, { SyntheticEvent } from 'react'
 import App, { Container } from 'next/app'
 import { ChakraProvider } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react"
+
+const theme = extendTheme({
+    styles: {
+        global: {
+            body: {
+                bg: "gray.700",
+            },
+        },
+    },
+})
 
 export default class MyApp extends App {
     static async getInitialProps({ Component, router, ctx }) {
@@ -17,11 +28,9 @@ export default class MyApp extends App {
     render() {
         const { Component, pageProps } = this.props
         return (
-            <div>
-                <ChakraProvider>
-                    <Component {...pageProps} />
-                </ChakraProvider>
-            </div>
+            <ChakraProvider theme={theme}>
+                <Component {...pageProps} />
+            </ChakraProvider>
         )
     }
 }

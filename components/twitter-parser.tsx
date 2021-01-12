@@ -61,7 +61,6 @@ export const TwitterParser: React.FC<{ data: Map<TwitterData, string>, mode: Twi
     if (props.data.has(TwitterData.tweetId)) {
         switch (props.mode) {
             case TwitterMode.tweet:
-                console.log(props.data)
                 return <TwitterTweetEmbed tweetId={props.data.get(TwitterData.tweetId)} theme='dark' />
         }
     }

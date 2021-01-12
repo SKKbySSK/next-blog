@@ -21,7 +21,7 @@ export default function CommonLayout(props: CommonLayoutProps) {
 
     const metaDescription = props.description ?? Config.description;
     return (
-        <div className="bg-gray-800 h-screen" style={{ overflow: 'auto scroll' }}>
+        <Box overflow='auto'>
             <Head>
                 <title>{title}</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -43,6 +43,6 @@ export default function CommonLayout(props: CommonLayoutProps) {
             <Box margin='auto' width={'90%'} maxWidth='800pt' textColor='white'>
                 {props.children}
             </Box>
-        </div>
+        </Box>
     )
 }
