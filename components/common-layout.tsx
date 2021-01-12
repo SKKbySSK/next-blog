@@ -37,8 +37,8 @@ export default function CommonLayout(props: CommonLayoutProps) {
                 <meta name="twitter:title" content={title} />
                 <meta name="twitter:description" content={metaDescription} />
                 <meta name="twitter:creator" content={Config.authorTwitter} />
-                <link rel="icon" type="image/png" href="/static/favicon.ico" />
-                <link rel="apple-touch-icon" href="/static/favicon.ico" />
+                <link rel="icon" type="image/png" href="/favicon.ico" />
+                <link rel="apple-touch-icon" href="/favicon.ico" />
             </Head>
             <Box margin='auto' width={'90%'} maxWidth='800pt' textColor='white'>
                 {props.children}
