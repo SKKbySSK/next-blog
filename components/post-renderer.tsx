@@ -22,7 +22,7 @@ function generateLink(post: Post, props: any) {
         const mode = titleLowerCase as TwitterMode
         const data = parseTwitterUrl(href, titleLowerCase)
         return (
-            <Box p='0.5em'>
+            <Box p='0.2em'>
                 <TwitterParser data={data} mode={mode} />
             </Box>
         )
@@ -31,7 +31,7 @@ function generateLink(post: Post, props: any) {
     if (titleLowerCase.length > 0) {
         return (
             <Link {...props}>
-                <Button colorScheme='teal' >
+                <Button colorScheme='teal' mt='0.5em' mb='0.5em'>
                     {title}
                 </Button>
             </Link >
@@ -87,15 +87,12 @@ const PostRenderer: React.FC<{ post: Post }> = (props) => {
                 </Stack>
             ),
             h3: (props) => (
-                <Stack mb='0.8em'>
-                    <Heading as='h3' mt='0.5em' fontSize='1.5em'>
-                        {props.children}
-                    </Heading>
-                    {hr(false)}
-                </Stack>
+                <Heading as='h3' mt='0.5em' mb='0.8em' fontSize='1.4em'>
+                    {props.children}
+                </Heading>
             ),
             h4: (props) => (
-                <Heading as='h4' mt='0.5em' mb='0.8em' fontSize='1.3em'>
+                <Heading as='h4' mt='0.5em' fontSize='1.2em'>
                     {props.children}
                 </Heading>
             ),

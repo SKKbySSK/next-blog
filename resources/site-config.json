@@ -2,7 +2,8 @@
   "title": "Ks' Café",
   "description": "趣味や技術をつらつらと",
   "author": "Kaisei Sunaga",
-  "authorTwitter": "@SKKbySSK_TC",
+  "authorDescription": "a software engineer",
+  "authorTwitter": "SKKbySSK_TC",
   "titleFormat": "$title - $main_title",
   "blogResourcesDir": "resources/blog-resources"
 }

@@ -9,6 +9,7 @@ import PostRenderer from "../../components/post-renderer";
 import { blogSiteFile } from "../../models/blog-constants";
 import Header from "../../components/header";
 import Config from "../../resources/site-config.json";
+import Author from "../../components/author";
 
 const PostPage: NextPage<{ post: Post }> = (props) => {
     const router = useRouter()
@@ -18,6 +19,7 @@ const PostPage: NextPage<{ post: Post }> = (props) => {
         <CommonLayout router={router} title={props.post.title} description={props.post.subtitle}>
             <Header />
             <PostRenderer post={props.post} />
+            <Author />
         </CommonLayout>
     )
 }
