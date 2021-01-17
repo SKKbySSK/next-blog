@@ -3,7 +3,7 @@ import React, { SyntheticEvent } from 'react'
 import App, { Container } from 'next/app'
 import { ChakraProvider } from "@chakra-ui/react";
 import "focus-visible/dist/focus-visible"
-import theme from "./theme";
+import { theme } from "./theme";
 
 
 export default class MyApp extends App {
