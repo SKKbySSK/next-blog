@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { SyntheticEvent } from "react";
 import Config from "../resources/site-config.json";
 import { NextRouter } from "next/router";
-import { Box } from "@chakra-ui/react";
+import { Box, Button, useColorMode, useColorModeValue } from "@chakra-ui/react";
 
 class CommonLayoutProps {
     router: NextRouter
@@ -20,6 +20,8 @@ export default function CommonLayout(props: CommonLayoutProps) {
     }
 
     const metaDescription = props.description ?? Config.description;
+    const textColor = useColorModeValue('black', 'white')
+
     return (
         <Box overflow='auto'>
             <Head>
@@ -40,7 +42,7 @@ export default function CommonLayout(props: CommonLayoutProps) {
                 <link rel="icon" type="image/png" href="/favicon.ico" />
                 <link rel="apple-touch-icon" href="/favicon.ico" />
             </Head>
-            <Box margin='auto' width={'90%'} maxWidth='800pt' textColor='white'>
+            <Box margin='auto' width={'90%'} maxWidth='800pt' textColor={textColor}>
                 {props.children}
             </Box>
         </Box>

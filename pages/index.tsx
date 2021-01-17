@@ -7,6 +7,8 @@ import { PostCardList } from "../components/post-card-list";
 import { NextPage } from "next";
 import { blogSiteFile } from "../models/blog-constants";
 import Header from "../components/header";
+import Author from "../components/author";
+import { Box } from "@chakra-ui/react";
 
 const Posts: NextPage<{ site: RawSite }> = (props) => {
     const router = useRouter()
@@ -14,7 +16,10 @@ const Posts: NextPage<{ site: RawSite }> = (props) => {
     return (
         <CommonLayout router={router}>
             <Header />
-            <PostCardList posts={props.site.posts} onClick={(post) => router.push(`/posts/${post.permalink}`)} />
+            <Box mt='1em'>
+                <PostCardList posts={props.site.posts} />
+            </Box>
+            <Author />
         </CommonLayout>
     )
 }

@@ -2,17 +2,9 @@ import "./style.css";
 import React, { SyntheticEvent } from 'react'
 import App, { Container } from 'next/app'
 import { ChakraProvider } from "@chakra-ui/react";
-import { extendTheme } from "@chakra-ui/react"
+import "focus-visible/dist/focus-visible"
+import theme from "./theme";
 
-const theme = extendTheme({
-    styles: {
-        global: {
-            body: {
-                bg: "gray.700",
-            },
-        },
-    },
-})
 
 export default class MyApp extends App {
     static async getInitialProps({ Component, router, ctx }) {

@@ -5,8 +5,8 @@ import Image from 'next/image'
 
 export default function Author() {
   return (
-    <Stack ml='auto' mr='auto' mt='2em' mb='2em' width={['100%', '90%', '70%']}>
-      <Box height='1px' backgroundColor='gray.500' />
+    <Stack ml='auto' mr='auto' mt='2em' mb='2em' align='center'>
+      <Box height='1px' backgroundColor='gray.500' width={['100%', '90%', '70%']} />
       <Stack direction='row' pl='0.5em' pr='0.5em' align='center'>
         <Image src='/profile.png' width='60pt' height='60pt' />
         <Box pl='1em' fontSize={['0.9em', '0.9em', '1em']}>
